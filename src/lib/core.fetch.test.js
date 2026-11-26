@@ -28,7 +28,9 @@ describe("fetchAQ", () => {
     expect(url).toContain("https://air-quality-api.open-meteo.com/v1/air-quality?");
     expect(url).toContain("latitude=28.6139");
     expect(url).toContain("longitude=77.209");
-    expect(url).toContain("hourly=pm2_5,pm10,carbon_monoxide,nitrogen_dioxide,sulphur_dioxide,ozone,dust,us_aqi,european_aqi");
+    expect(url).toContain(
+      "hourly=pm2_5,pm10,carbon_monoxide,nitrogen_dioxide,sulphur_dioxide,ozone,dust,us_aqi,european_aqi",
+    );
     expect(url).toContain("forecast_days=5");
     expect(url).toContain("past_days=2"); // past days feed the CPCB trailing means
   });
@@ -60,8 +62,14 @@ describe("geocode", () => {
    now in UTC, with a marker AQI at the current hour. */
 function aroundNow() {
   const now = new Date();
-  const hourStart = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours());
-  const times = [], aqis = [];
+  const hourStart = Date.UTC(
+    now.getUTCFullYear(),
+    now.getUTCMonth(),
+    now.getUTCDate(),
+    now.getUTCHours(),
+  );
+  const times = [],
+    aqis = [];
   for (let h = -48; h <= 48; h++) {
     times.push(new Date(hourStart + h * 3600e3).toISOString().slice(0, 16));
     aqis.push(h === 0 ? 222 : 111);
@@ -79,7 +87,8 @@ describe("currentIndex", () => {
   });
   it("falls back to the last entry when all data is in the past", () => {
     const past = [];
-    for (let h = 0; h < 24; h++) past.push(new Date(Date.UTC(2020, 0, 1, h)).toISOString().slice(0, 16));
+    for (let h = 0; h < 24; h++)
+      past.push(new Date(Date.UTC(2020, 0, 1, h)).toISOString().slice(0, 16));
     const data = { utc_offset_seconds: 0, hourly: { time: past, us_aqi: past.map(() => 50) } };
     expect(currentIndex(data)).toBe(23);
   });

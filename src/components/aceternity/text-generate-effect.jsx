@@ -1,6 +1,7 @@
-import { useEffect } from 'react';
-import { motion, stagger, useAnimate, useReducedMotion } from 'framer-motion';
-import { cn } from '../../lib/utils';
+import { useEffect } from "react";
+import PropTypes from "prop-types";
+import { motion, stagger, useAnimate, useReducedMotion } from "framer-motion";
+import { cn } from "../../lib/utils";
 
 /*
  * Adapted from Aceternity UI — Text Generate Effect
@@ -26,16 +27,18 @@ export const TextGenerateEffect = ({
 }) => {
   const [scope, animate] = useAnimate();
   const reduce = useReducedMotion();
-  const wordsArray = words.split(' ');
+  const wordsArray = words.split(" ");
 
   useEffect(() => {
     if (reduce || !scope.current) return undefined;
     const controls = animate(
-      'span',
-      { opacity: 1, filter: filter ? 'blur(0px)' : 'none' },
-      { duration: duration || 1, delay: stagger(staggerDelay) }
+      "span",
+      { opacity: 1, filter: filter ? "blur(0px)" : "none" },
+      { duration: duration || 1, delay: stagger(staggerDelay) },
     );
-    return () => { if (controls && controls.stop) controls.stop(); };
+    return () => {
+      if (controls && controls.stop) controls.stop();
+    };
   }, [words, reduce, animate, filter, duration, staggerDelay, scope]);
 
   if (reduce) {
@@ -49,9 +52,9 @@ export const TextGenerateEffect = ({
           <motion.span
             key={`${word}-${idx}`}
             className="opacity-0"
-            style={{ filter: filter ? 'blur(10px)' : 'none' }}
+            style={{ filter: filter ? "blur(10px)" : "none" }}
           >
-            {word}{' '}
+            {word}{" "}
           </motion.span>
         ))}
       </motion.div>
@@ -60,3 +63,15 @@ export const TextGenerateEffect = ({
 };
 
 export default TextGenerateEffect;
+
+TextGenerateEffect.propTypes = {
+  /** The sentence to reveal word by word. */
+  words: PropTypes.string.isRequired,
+  className: PropTypes.string,
+  /** Whether words start blurred and sharpen as they appear. */
+  filter: PropTypes.bool,
+  /** Per-word fade duration (seconds). */
+  duration: PropTypes.number,
+  /** Delay between successive words (seconds). */
+  staggerDelay: PropTypes.number,
+};

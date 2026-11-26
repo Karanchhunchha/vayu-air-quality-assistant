@@ -1,7 +1,8 @@
-import { motion } from 'framer-motion';
-import { POLLUTANTS, categoryFor, fmt, subIndex } from '../lib/core';
-import { SectionHeading } from './ui';
-import { CardSpotlight } from './aceternity/card-spotlight';
+import PropTypes from "prop-types";
+import { motion } from "framer-motion";
+import { POLLUTANTS, categoryFor, fmt, subIndex } from "../lib/core";
+import { SectionHeading } from "./ui";
+import { CardSpotlight } from "./aceternity/card-spotlight";
 
 export default function Pollutants({ values }) {
   if (!values) return null;
@@ -30,16 +31,30 @@ export default function Pollutants({ values }) {
                 <span className="tnum text-[13px] text-inksoft">
                   <strong className="font-display text-ink">{fmt(v)}</strong> µg/m³
                   {ratio !== null && (
-                    <span className={ratio > 1 ? 'ml-2 font-semibold text-[#c81e1e]' : 'ml-2 font-semibold text-[#047857]'}>
-                      {ratio >= 1 ? `${ratio.toFixed(1)}× WHO limit` : 'within WHO limit'}
+                    <span
+                      className={
+                        ratio > 1
+                          ? "ml-2 font-semibold text-[#c81e1e]"
+                          : "ml-2 font-semibold text-[#047857]"
+                      }
+                    >
+                      {ratio >= 1 ? `${ratio.toFixed(1)}× WHO limit` : "within WHO limit"}
                     </span>
                   )}
                 </span>
               </div>
-              <div className="relative h-3 overflow-visible rounded-full bg-slate-100">
+              <div
+                className="relative h-3 overflow-visible rounded-full bg-slate-100"
+                role="img"
+                aria-label={
+                  si === null
+                    ? `${p.name} sub-index unavailable`
+                    : `${p.name} sub-index ${si} of 500`
+                }
+              >
                 <motion.div
                   className="h-full rounded-full"
-                  style={{ background: cat ? cat.color : '#cbd5e1' }}
+                  style={{ background: cat ? cat.color : "#cbd5e1" }}
                   initial={{ width: 0 }}
                   animate={{ width: `${pct}%` }}
                   transition={{ duration: 0.9, delay: i * 0.07, ease: [0.22, 0.61, 0.36, 1] }}
@@ -55,8 +70,14 @@ export default function Pollutants({ values }) {
         })}
       </div>
       <p className="mt-4 border-t border-line pt-3 text-xs leading-relaxed text-inkfaint">
-        WHO 2021 guideline values (24-h; O₃ 8-h, CO 24-h): PM2.5 15 · PM10 45 · NO₂ 25 · SO₂ 40 · O₃ 100 · CO 4000 µg/m³.
+        WHO 2021 guideline values (24-h; O₃ 8-h, CO 24-h): PM2.5 15 · PM10 45 · NO₂ 25 · SO₂ 40 · O₃
+        100 · CO 4000 µg/m³.
       </p>
     </CardSpotlight>
   );
 }
+
+Pollutants.propTypes = {
+  /** Current pollutant values keyed by pollutant key (core.currentValues). */
+  values: PropTypes.object,
+};

@@ -1,8 +1,9 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { CATEGORIES, CITIZEN_ACTIONS, GRAP_STAGES, categoryIndex, stageIdxFor } from '../lib/core';
-import { SectionHeading } from './ui';
-import { CardSpotlight } from './aceternity/card-spotlight';
+import { useState } from "react";
+import PropTypes from "prop-types";
+import { motion, AnimatePresence } from "framer-motion";
+import { CATEGORIES, CITIZEN_ACTIONS, GRAP_STAGES, categoryIndex, stageIdxFor } from "../lib/core";
+import { SectionHeading } from "./ui";
+import { CardSpotlight } from "./aceternity/card-spotlight";
 
 export function Sources({ summary }) {
   if (!summary) return null;
@@ -55,7 +56,7 @@ export function ActionPlan({ summary }) {
           return (
             <div
               key={stage.title}
-              className={`overflow-hidden rounded-2xl ring-1 transition ${isActive ? 'bg-white ring-brand/30 shadow-card' : 'bg-mist/60 ring-slate-900/5'}`}
+              className={`overflow-hidden rounded-2xl ring-1 transition ${isActive ? "bg-white ring-brand/30 shadow-card" : "bg-mist/60 ring-slate-900/5"}`}
               style={{ borderLeft: `4px solid ${barColor}` }}
             >
               <button
@@ -63,20 +64,30 @@ export function ActionPlan({ summary }) {
                 onClick={() => setOpen(isOpen ? -1 : i)}
                 className="flex w-full items-center gap-2 px-4 py-3 text-left"
                 aria-expanded={isOpen}
+                aria-controls={`grap-panel-${i}`}
               >
-                <span className="flex-1 font-display text-sm font-bold text-ink">{stage.title}</span>
+                <span className="flex-1 font-display text-sm font-bold text-ink">
+                  {stage.title}
+                </span>
                 {isActive && (
                   <span className="rounded-full bg-red-50 px-2 py-0.5 text-[11px] font-bold text-red-600 ring-1 ring-red-200">
                     ● Active now
                   </span>
                 )}
-                <motion.span animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.25 }} className="text-slate-400">▾</motion.span>
+                <motion.span
+                  animate={{ rotate: isOpen ? 180 : 0 }}
+                  transition={{ duration: 0.25 }}
+                  className="text-slate-400"
+                >
+                  ▾
+                </motion.span>
               </button>
               <AnimatePresence initial={false}>
                 {isOpen && (
                   <motion.div
+                    id={`grap-panel-${i}`}
                     initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
+                    animate={{ height: "auto", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.3, ease: [0.22, 0.61, 0.36, 1] }}
                   >
@@ -100,3 +111,13 @@ export function ActionPlan({ summary }) {
     </CardSpotlight>
   );
 }
+
+Sources.propTypes = {
+  /** Summary view-model for the current city (core.summarize). */
+  summary: PropTypes.object,
+};
+
+ActionPlan.propTypes = {
+  /** Summary view-model for the current city (core.summarize). */
+  summary: PropTypes.object,
+};

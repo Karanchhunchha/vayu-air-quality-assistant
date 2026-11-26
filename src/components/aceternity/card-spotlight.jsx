@@ -1,6 +1,7 @@
-import { useState } from 'react';
-import { motion, useMotionTemplate, useMotionValue } from 'framer-motion';
-import { cn } from '../../lib/utils';
+import { useState } from "react";
+import PropTypes from "prop-types";
+import { motion, useMotionTemplate, useMotionValue } from "framer-motion";
+import { cn } from "../../lib/utils";
 
 /*
  * Adapted from Aceternity UI — Card Spotlight
@@ -21,7 +22,7 @@ export const CardSpotlight = ({
   children,
   className,
   radius = 340,
-  color = 'rgba(14, 124, 134, 0.09)',
+  color = "rgba(14, 124, 134, 0.09)",
 }) => {
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -38,8 +39,8 @@ export const CardSpotlight = ({
   return (
     <section
       className={cn(
-        'group relative overflow-hidden rounded-3xl bg-white p-5 shadow-card ring-1 ring-slate-900/5 sm:p-7',
-        className
+        "group relative overflow-hidden rounded-3xl bg-white p-5 shadow-card ring-1 ring-slate-900/5 sm:p-7",
+        className,
       )}
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovering(true)}
@@ -58,3 +59,12 @@ export const CardSpotlight = ({
 };
 
 export default CardSpotlight;
+
+CardSpotlight.propTypes = {
+  children: PropTypes.node,
+  className: PropTypes.string,
+  /** Radius (px) of the cursor spotlight gradient. */
+  radius: PropTypes.number,
+  /** Spotlight gradient colour. */
+  color: PropTypes.string,
+};

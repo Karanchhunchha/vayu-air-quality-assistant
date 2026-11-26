@@ -8,20 +8,48 @@
    ===================================================================== */
 import { describe, it, expect } from "vitest";
 import {
-  BREAKPOINTS, CPCB_BREAKPOINTS,
-  num, fmt, dayName, addDays, fmtTime, hourLabel,
-  categoryFor, categoryIndex, cpcbCategoryFor,
-  subIndex, subIndexWith,
-  trailingMean, computeCPCB, cigaretteEquivalent,
-  bestHourIn, aqWindow, dominantPollutant,
-  daySummaries, daySummaryFor, sourceInsights, summarize,
-  healthAdvice, stageIdxFor, planActivity,
-  profileById, activityById
+  BREAKPOINTS,
+  CPCB_BREAKPOINTS,
+  num,
+  fmt,
+  dayName,
+  addDays,
+  fmtTime,
+  hourLabel,
+  categoryFor,
+  categoryIndex,
+  cpcbCategoryFor,
+  subIndex,
+  subIndexWith,
+  trailingMean,
+  computeCPCB,
+  cigaretteEquivalent,
+  bestHourIn,
+  aqWindow,
+  dominantPollutant,
+  daySummaries,
+  daySummaryFor,
+  sourceInsights,
+  summarize,
+  healthAdvice,
+  stageIdxFor,
+  planActivity,
+  profileById,
+  activityById,
 } from "./core.js";
 
 /* ---------- Synthetic Open-Meteo-shaped data ---------- */
-const KEYS = ["pm2_5", "pm10", "carbon_monoxide", "nitrogen_dioxide",
-  "sulphur_dioxide", "ozone", "dust", "us_aqi", "european_aqi"];
+const KEYS = [
+  "pm2_5",
+  "pm10",
+  "carbon_monoxide",
+  "nitrogen_dioxide",
+  "sulphur_dioxide",
+  "ozone",
+  "dust",
+  "us_aqi",
+  "european_aqi",
+];
 
 /* Builds `hours` of hourly data starting 2026-11-24T00:00 UTC.
    gen(i, timeStr) returns the pollutant values for that hour;
@@ -90,19 +118,28 @@ describe("US EPA subIndex (piecewise-linear breakpoint interpolation)", () => {
     // EPA PM2.5 bands: 0–12.0→0–50, 12.1–35.4→51–100, 35.5–55.4→101–150,
     // 55.5–150.4→151–200, 150.5–250.4→201–300, 250.5–500.4→301–500
     const cases = [
-      [0, 0], [12.0, 50], [12.1, 51], [35.4, 100], [35.5, 101],
-      [55.4, 150], [55.5, 151], [150.4, 200], [150.5, 201],
-      [250.4, 300], [250.5, 301], [500.4, 500]
+      [0, 0],
+      [12.0, 50],
+      [12.1, 51],
+      [35.4, 100],
+      [35.5, 101],
+      [55.4, 150],
+      [55.5, 151],
+      [150.4, 200],
+      [150.5, 201],
+      [250.4, 300],
+      [250.5, 301],
+      [500.4, 500],
     ];
     for (const [conc, expected] of cases) {
       expect(subIndex("pm2_5", conc), `PM2.5 ${conc}`).toBe(expected);
     }
   });
   it("interpolates linearly inside a band", () => {
-    expect(subIndex("pm2_5", 6)).toBe(25);      // halfway through band 1
-    expect(subIndex("pm2_5", 23.7)).toBe(75);   // inside band 2
-    expect(subIndex("pm10", 200)).toBe(123);    // inside PM10 band 3 (155–254 → 101–150)
-    expect(subIndex("ozone", 140)).toBe(100);   // top of ozone band 2
+    expect(subIndex("pm2_5", 6)).toBe(25); // halfway through band 1
+    expect(subIndex("pm2_5", 23.7)).toBe(75); // inside band 2
+    expect(subIndex("pm10", 200)).toBe(123); // inside PM10 band 3 (155–254 → 101–150)
+    expect(subIndex("ozone", 140)).toBe(100); // top of ozone band 2
   });
   it("hits PM10 band boundaries", () => {
     expect(subIndex("pm10", 54)).toBe(50);
@@ -131,8 +168,18 @@ describe("CPCB subIndexWith (India breakpoint tables)", () => {
     // CPCB PM2.5: 0–30→0–50, 31–60→51–100, 61–90→101–200,
     // 91–120→201–300, 121–250→301–400, 251–500→401–500
     const cases = [
-      [0, 0], [30, 50], [31, 51], [60, 100], [61, 101], [90, 200],
-      [91, 201], [120, 300], [121, 301], [250, 400], [251, 401], [500, 500]
+      [0, 0],
+      [30, 50],
+      [31, 51],
+      [60, 100],
+      [61, 101],
+      [90, 200],
+      [91, 201],
+      [120, 300],
+      [121, 301],
+      [250, 400],
+      [251, 401],
+      [500, 500],
     ];
     for (const [conc, expected] of cases) {
       expect(subIndexWith(CPCB_BREAKPOINTS.pm2_5, conc), `CPCB PM2.5 ${conc}`).toBe(expected);
@@ -165,10 +212,18 @@ describe("CPCB subIndexWith (India breakpoint tables)", () => {
 describe("categoryFor (US EPA categories)", () => {
   it("maps every band boundary to the right category", () => {
     const cases = [
-      [0, "Good"], [50, "Good"], [51, "Moderate"], [100, "Moderate"],
-      [101, "Unhealthy for Sensitive Groups"], [150, "Unhealthy for Sensitive Groups"],
-      [151, "Unhealthy"], [200, "Unhealthy"], [201, "Very Unhealthy"],
-      [300, "Very Unhealthy"], [301, "Hazardous"], [500, "Hazardous"]
+      [0, "Good"],
+      [50, "Good"],
+      [51, "Moderate"],
+      [100, "Moderate"],
+      [101, "Unhealthy for Sensitive Groups"],
+      [150, "Unhealthy for Sensitive Groups"],
+      [151, "Unhealthy"],
+      [200, "Unhealthy"],
+      [201, "Very Unhealthy"],
+      [300, "Very Unhealthy"],
+      [301, "Hazardous"],
+      [500, "Hazardous"],
     ];
     for (const [aqi, name] of cases) expect(categoryFor(aqi)?.name, `AQI ${aqi}`).toBe(name);
   });
@@ -187,11 +242,20 @@ describe("categoryFor (US EPA categories)", () => {
 describe("cpcbCategoryFor (India categories)", () => {
   it("maps every band boundary to the right category", () => {
     const cases = [
-      [50, "Good"], [51, "Satisfactory"], [100, "Satisfactory"],
-      [101, "Moderate"], [200, "Moderate"], [201, "Poor"], [300, "Poor"],
-      [301, "Very Poor"], [400, "Very Poor"], [401, "Severe"], [500, "Severe"]
+      [50, "Good"],
+      [51, "Satisfactory"],
+      [100, "Satisfactory"],
+      [101, "Moderate"],
+      [200, "Moderate"],
+      [201, "Poor"],
+      [300, "Poor"],
+      [301, "Very Poor"],
+      [400, "Very Poor"],
+      [401, "Severe"],
+      [500, "Severe"],
     ];
-    for (const [aqi, name] of cases) expect(cpcbCategoryFor(aqi)?.name, `CPCB AQI ${aqi}`).toBe(name);
+    for (const [aqi, name] of cases)
+      expect(cpcbCategoryFor(aqi)?.name, `CPCB AQI ${aqi}`).toBe(name);
     expect(cpcbCategoryFor(null)).toBeNull();
   });
 });
@@ -218,31 +282,55 @@ describe("trailingMean", () => {
 /* ---------- CPCB AQI end-to-end ---------- */
 describe("computeCPCB", () => {
   it("takes the maximum sub-index across pollutants", () => {
-    const data = makeData(24, constant({
-      pm2_5: 60, pm10: 100, nitrogen_dioxide: 40,
-      sulphur_dioxide: 40, ozone: 50, carbon_monoxide: 1000
-    }));
+    const data = makeData(
+      24,
+      constant({
+        pm2_5: 60,
+        pm10: 100,
+        nitrogen_dioxide: 40,
+        sulphur_dioxide: 40,
+        ozone: 50,
+        carbon_monoxide: 1000,
+      }),
+    );
     const r = computeCPCB(data, 23);
     expect(r.enough).toBe(true);
     expect(r.subs).toEqual({
-      pm2_5: 100, pm10: 100, nitrogen_dioxide: 50,
-      sulphur_dioxide: 50, ozone: 50, carbon_monoxide: 50
+      pm2_5: 100,
+      pm10: 100,
+      nitrogen_dioxide: 50,
+      sulphur_dioxide: 50,
+      ozone: 50,
+      carbon_monoxide: 50,
     });
     expect(r.aqi).toBe(100);
     expect(r.cat?.name).toBe("Satisfactory");
   });
   it("lets a single dominant pollutant drive the result", () => {
-    const data = makeData(24, constant({
-      pm2_5: 90, pm10: 40, nitrogen_dioxide: 32,
-      sulphur_dioxide: 20, ozone: 40, carbon_monoxide: 500
-    }));
+    const data = makeData(
+      24,
+      constant({
+        pm2_5: 90,
+        pm10: 40,
+        nitrogen_dioxide: 32,
+        sulphur_dioxide: 20,
+        ozone: 40,
+        carbon_monoxide: 500,
+      }),
+    );
     const r = computeCPCB(data, 23);
     expect(r.subs.pm2_5).toBe(200); // 90 µg/m³ is the top of CPCB band 3
     expect(r.aqi).toBe(200);
     expect(r.cat?.name).toBe("Moderate");
   });
   it("flips category exactly at a breakpoint boundary (30 vs 31 µg/m³ PM2.5)", () => {
-    const base = { pm10: 50, nitrogen_dioxide: 40, sulphur_dioxide: 40, ozone: 50, carbon_monoxide: 1000 };
+    const base = {
+      pm10: 50,
+      nitrogen_dioxide: 40,
+      sulphur_dioxide: 40,
+      ozone: 50,
+      carbon_monoxide: 1000,
+    };
     const at = computeCPCB(makeData(24, constant({ ...base, pm2_5: 30 })), 23);
     const over = computeCPCB(makeData(24, constant({ ...base, pm2_5: 31 })), 23);
     expect(at.aqi).toBe(50);
@@ -251,10 +339,17 @@ describe("computeCPCB", () => {
     expect(over.cat?.name).toBe("Satisfactory");
   });
   it("converts CO from µg/m³ to mg/m³ before applying the CPCB table", () => {
-    const data = makeData(24, constant({
-      pm2_5: 30, pm10: 50, nitrogen_dioxide: 40,
-      sulphur_dioxide: 40, ozone: 50, carbon_monoxide: 34000 // = 34 mg/m³
-    }));
+    const data = makeData(
+      24,
+      constant({
+        pm2_5: 30,
+        pm10: 50,
+        nitrogen_dioxide: 40,
+        sulphur_dioxide: 40,
+        ozone: 50,
+        carbon_monoxide: 34000, // = 34 mg/m³
+      }),
+    );
     const r = computeCPCB(data, 23);
     expect(r.means.carbon_monoxide).toBe(34);
     expect(r.subs.carbon_monoxide).toBe(400); // top of CPCB CO band 5
@@ -262,10 +357,17 @@ describe("computeCPCB", () => {
     expect(r.cat?.name).toBe("Very Poor");
   });
   it("refuses an AQI when the 24-h completeness rule is not met (only 10 h of data)", () => {
-    const data = makeData(10, constant({
-      pm2_5: 60, pm10: 100, nitrogen_dioxide: 40,
-      sulphur_dioxide: 40, ozone: 50, carbon_monoxide: 1000
-    }));
+    const data = makeData(
+      10,
+      constant({
+        pm2_5: 60,
+        pm10: 100,
+        nitrogen_dioxide: 40,
+        sulphur_dioxide: 40,
+        ozone: 50,
+        carbon_monoxide: 1000,
+      }),
+    );
     const r = computeCPCB(data, 9);
     expect(r.enough).toBe(false);
     expect(r.aqi).toBeNull();
@@ -275,9 +377,15 @@ describe("computeCPCB", () => {
     expect(r.subs.pm2_5).toBeNull();
   });
   it("refuses an AQI without PM2.5 or PM10, even with 3+ other pollutants (CPCB rule)", () => {
-    const data = makeData(24, constant({
-      nitrogen_dioxide: 40, sulphur_dioxide: 40, ozone: 50, carbon_monoxide: 1000
-    }));
+    const data = makeData(
+      24,
+      constant({
+        nitrogen_dioxide: 40,
+        sulphur_dioxide: 40,
+        ozone: 50,
+        carbon_monoxide: 1000,
+      }),
+    );
     const r = computeCPCB(data, 23);
     expect(r.enough).toBe(false);
     expect(r.aqi).toBeNull();
@@ -306,9 +414,12 @@ describe("aqWindow (cleanest / worst sliding windows)", () => {
   // (180, 190) at hours 5–6; a null at hour 30 next to a 10 at hour 31.
   const data = makeData(48, (i) => {
     let a = 100;
-    if (i === 20) a = 40; else if (i === 21) a = 30;
-    else if (i === 5) a = 180; else if (i === 6) a = 190;
-    else if (i === 30) a = null; else if (i === 31) a = 10;
+    if (i === 20) a = 40;
+    else if (i === 21) a = 30;
+    else if (i === 5) a = 180;
+    else if (i === 6) a = 190;
+    else if (i === 30) a = null;
+    else if (i === 31) a = 10;
     return { us_aqi: a };
   });
   it("finds the cleanest full 2-hour window", () => {
@@ -359,11 +470,17 @@ describe("bestHourIn", () => {
 /* ---------- Dominant pollutant & day summaries ---------- */
 describe("dominantPollutant", () => {
   it("picks the pollutant with the highest US sub-index, not the highest concentration", () => {
-    const data = makeData(24, constant({
-      pm2_5: 10,           // sub-index 42
-      pm10: 200,           // sub-index 123 ← dominant
-      nitrogen_dioxide: 50, sulphur_dioxide: 30, ozone: 50, carbon_monoxide: 1000
-    }));
+    const data = makeData(
+      24,
+      constant({
+        pm2_5: 10, // sub-index 42
+        pm10: 200, // sub-index 123 ← dominant
+        nitrogen_dioxide: 50,
+        sulphur_dioxide: 30,
+        ozone: 50,
+        carbon_monoxide: 1000,
+      }),
+    );
     const d = dominantPollutant(data, 5);
     expect(d?.pollutant.name).toBe("PM10");
     expect(d?.si).toBe(123);
@@ -390,8 +507,12 @@ describe("daySummaries / daySummaryFor", () => {
 /* ---------- Source insights ---------- */
 describe("sourceInsights", () => {
   const base = {
-    nitrogen_dioxide: 20, sulphur_dioxide: 10, ozone: 50,
-    carbon_monoxide: 500, dust: 10, us_aqi: 100
+    nitrogen_dioxide: 20,
+    sulphur_dioxide: 10,
+    ozone: 50,
+    carbon_monoxide: 500,
+    dust: 10,
+    us_aqi: 100,
   };
   const tags = (data, idx) => sourceInsights(data, idx).map((x) => x.tag);
   it("flags dust & construction when PM10 dominates PM2.5 (ratio ≥ 1.8)", () => {
@@ -438,7 +559,9 @@ describe("healthAdvice", () => {
     expect(healthAdvice(120, "asthma").mask).toContain("N95/KN95");
   });
   it("escalates mask and ventilation advice at high AQI", () => {
-    expect(healthAdvice(175, "general").mask).toContain("Cloth and surgical masks give little protection");
+    expect(healthAdvice(175, "general").mask).toContain(
+      "Cloth and surgical masks give little protection",
+    );
     const severe = healthAdvice(250, "asthma");
     expect(severe.exercise).toContain("No outdoor exercise");
     expect(severe.vent).toContain("Keep windows and doors closed");
@@ -461,45 +584,92 @@ describe("planActivity (dose model: dose = PM × rate × hours; score = dose × 
   const plan = (data, opts) => planActivity(data, 0, opts);
 
   it("computes dose and score for a simple case", () => {
-    const r = plan(flat(50), { activityId: "walk", startIdx: 0, durationH: 1, profileId: "general" });
+    const r = plan(flat(50), {
+      activityId: "walk",
+      startIdx: 0,
+      durationH: 1,
+      profileId: "general",
+    });
     expect(r.avgPM).toBe(50);
-    expect(r.dose).toBeCloseTo(55, 6);        // 50 × 1.1 m³/h × 1 h
-    expect(r.score).toBe(18);                 // round(55 × 1.0 / 3)
+    expect(r.dose).toBeCloseTo(55, 6); // 50 × 1.1 m³/h × 1 h
+    expect(r.score).toBe(18); // round(55 × 1.0 / 3)
     expect(r.verdict.label).toBe("Go");
   });
   it("walks through every verdict band at its exact boundary", () => {
     // schoolrun rate = 1.0, general vuln = 1.0, 1 h → score = PM / 3
-    const cases = [[75, 25, "Go"], [150, 50, "Go with care"], [225, 75, "Avoid"], [240, 80, "Skip"]];
+    const cases = [
+      [75, 25, "Go"],
+      [150, 50, "Go with care"],
+      [225, 75, "Avoid"],
+      [240, 80, "Skip"],
+    ];
     for (const [pm, score, label] of cases) {
-      const r = plan(flat(pm), { activityId: "schoolrun", startIdx: 0, durationH: 1, profileId: "general" });
+      const r = plan(flat(pm), {
+        activityId: "schoolrun",
+        startIdx: 0,
+        durationH: 1,
+        profileId: "general",
+      });
       expect(r.score, `PM ${pm}`).toBe(score);
       expect(r.verdict.label, `PM ${pm}`).toBe(label);
     }
   });
   it("caps the score at 100 for extreme doses", () => {
-    const r = plan(flat(500), { activityId: "run", startIdx: 0, durationH: 3, profileId: "asthma" });
-    expect(r.dose).toBeCloseTo(3900, 6);      // 500 × 2.6 × 3
-    expect(r.score).toBe(100);                // raw 2080, capped
+    const r = plan(flat(500), {
+      activityId: "run",
+      startIdx: 0,
+      durationH: 3,
+      profileId: "asthma",
+    });
+    expect(r.dose).toBeCloseTo(3900, 6); // 500 × 2.6 × 3
+    expect(r.score).toBe(100); // raw 2080, capped
     expect(r.verdict.label).toBe("Skip");
   });
   it("never lets the score leave the 0–100 range", () => {
     for (const pm of [0, 1, 40, 120, 300, 999]) {
-      const r = plan(flat(pm), { activityId: "run", startIdx: 0, durationH: 4, profileId: "asthma" });
+      const r = plan(flat(pm), {
+        activityId: "run",
+        startIdx: 0,
+        durationH: 4,
+        profileId: "asthma",
+      });
       expect(r.score).toBeGreaterThanOrEqual(0);
       expect(r.score).toBeLessThanOrEqual(100);
     }
-    expect(plan(flat(0), { activityId: "walk", startIdx: 0, durationH: 1, profileId: "general" }).score).toBe(0);
+    expect(
+      plan(flat(0), { activityId: "walk", startIdx: 0, durationH: 1, profileId: "general" }).score,
+    ).toBe(0);
   });
   it("scores strictly higher when the air is dirtier", () => {
-    const clean = plan(flat(40), { activityId: "walk", startIdx: 0, durationH: 1, profileId: "general" });
-    const dirty = plan(flat(120), { activityId: "walk", startIdx: 0, durationH: 1, profileId: "general" });
+    const clean = plan(flat(40), {
+      activityId: "walk",
+      startIdx: 0,
+      durationH: 1,
+      profileId: "general",
+    });
+    const dirty = plan(flat(120), {
+      activityId: "walk",
+      startIdx: 0,
+      durationH: 1,
+      profileId: "general",
+    });
     expect(clean.score).toBe(15);
     expect(dirty.score).toBe(44);
     expect(dirty.score).toBeGreaterThan(clean.score);
   });
   it("scores strictly higher for longer durations at the same concentration", () => {
-    const one = plan(flat(60), { activityId: "walk", startIdx: 0, durationH: 1, profileId: "general" });
-    const three = plan(flat(60), { activityId: "walk", startIdx: 0, durationH: 3, profileId: "general" });
+    const one = plan(flat(60), {
+      activityId: "walk",
+      startIdx: 0,
+      durationH: 1,
+      profileId: "general",
+    });
+    const three = plan(flat(60), {
+      activityId: "walk",
+      startIdx: 0,
+      durationH: 3,
+      profileId: "general",
+    });
     expect(one.score).toBe(22);
     expect(three.score).toBe(66);
     expect(three.dose).toBeCloseTo(one.dose * 3, 6);
@@ -509,9 +679,9 @@ describe("planActivity (dose model: dose = PM × rate × hours; score = dose × 
     const general = plan(flat(100), { ...opts, profileId: "general" });
     const child = plan(flat(100), { ...opts, profileId: "child" });
     const asthma = plan(flat(100), { ...opts, profileId: "asthma" });
-    expect(general.score).toBe(63);   // 190 × 1.0 / 3
-    expect(child.score).toBe(82);     // 190 × 1.3 / 3
-    expect(asthma.score).toBe(100);   // 190 × 1.6 / 3, capped
+    expect(general.score).toBe(63); // 190 × 1.0 / 3
+    expect(child.score).toBe(82); // 190 × 1.3 / 3
+    expect(asthma.score).toBe(100); // 190 × 1.6 / 3, capped
     expect(child.score).toBeGreaterThan(general.score);
     expect(asthma.score).toBeGreaterThan(child.score);
   });
@@ -528,8 +698,12 @@ describe("planActivity (dose model: dose = PM × rate × hours; score = dose × 
     expect(r.alt?.pctLess).toBe(90); // 20 vs 200 µg/m³
   });
   it("reports No data when the PM2.5 series is missing", () => {
-    const r = plan(makeData(48, constant({ us_aqi: 100 })),
-      { activityId: "walk", startIdx: 0, durationH: 1, profileId: "general" });
+    const r = plan(makeData(48, constant({ us_aqi: 100 })), {
+      activityId: "walk",
+      startIdx: 0,
+      durationH: 1,
+      profileId: "general",
+    });
     expect(r.avgPM).toBeNull();
     expect(r.score).toBeNull();
     expect(r.dose).toBeNull();
@@ -549,11 +723,17 @@ describe("summarize", () => {
     const data = makeData(72, (i, t) => {
       const day = t.slice(0, 10);
       let a = 120;
-      if (day === "2026-11-24") a = i === 10 ? 160 : 100;   // yesterday
-      if (day === "2026-11-26") a = i === 60 ? 210 : 130;   // tomorrow
+      if (day === "2026-11-24") a = i === 10 ? 160 : 100; // yesterday
+      if (day === "2026-11-26") a = i === 60 ? 210 : 130; // tomorrow
       return {
-        us_aqi: a, european_aqi: 60, pm2_5: 66, pm10: 100,
-        nitrogen_dioxide: 40, sulphur_dioxide: 40, ozone: 50, carbon_monoxide: 1000
+        us_aqi: a,
+        european_aqi: 60,
+        pm2_5: 66,
+        pm10: 100,
+        nitrogen_dioxide: 40,
+        sulphur_dioxide: 40,
+        ozone: 50,
+        carbon_monoxide: 1000,
       };
     });
     const s = summarize(data, 36, { name: "Delhi" }); // 2026-11-25T12:00
@@ -563,9 +743,9 @@ describe("summarize", () => {
     expect(s.yesterdayMax).toBe(160);
     expect(s.todayMax).toBe(120);
     expect(s.tomorrowMax).toBe(210);
-    expect(s.cig?.cigs).toBe(3);            // 66 / 22
+    expect(s.cig?.cigs).toBe(3); // 66 / 22
     expect(s.cpcb.enough).toBe(true);
-    expect(s.cpcb.aqi).toBe(118);           // PM2.5 66 → CPCB band 3 interpolation
+    expect(s.cpcb.aqi).toBe(118); // PM2.5 66 → CPCB band 3 interpolation
     expect(s.cpcb.cat?.name).toBe("Moderate");
     expect(s.dom?.pollutant.name).toBe("PM2.5");
     expect(s.cleanWindow).not.toBeNull();

@@ -1,5 +1,6 @@
-import { categoryFor, fmt } from '../lib/core';
-import { LogoMark } from './ui';
+import PropTypes from "prop-types";
+import { categoryFor, fmt } from "../lib/core";
+import { LogoMark } from "./ui";
 
 export default function Header({ ticker }) {
   const items = ticker && ticker.length ? ticker : [];
@@ -11,7 +12,10 @@ export default function Header({ ticker }) {
           <LogoMark size={42} />
           <div className="min-w-0 flex-1">
             <p className="truncate font-display text-lg font-bold leading-tight text-ink sm:text-xl">
-              Vayu <span className="hidden font-semibold text-inksoft sm:inline">— Urban Air Quality Assistant</span>
+              Vayu{" "}
+              <span className="hidden font-semibold text-inksoft sm:inline">
+                — Urban Air Quality Assistant
+              </span>
             </p>
             <p className="truncate text-xs text-inksoft sm:text-[13px]">
               Live AQI · 72-hour forecasts · Personalised health guidance
@@ -22,7 +26,11 @@ export default function Header({ ticker }) {
           </span>
         </div>
         {items.length > 0 && (
-          <div className="relative overflow-hidden border-t border-slate-900/5 bg-white/50" aria-label="Live AQI across Indian cities">
+          <div
+            className="relative overflow-hidden border-t border-slate-900/5 bg-white/50"
+            role="region"
+            aria-label="Live AQI across Indian cities"
+          >
             <div className="marquee-track flex w-max items-center gap-8 px-4 py-1.5">
               {doubled.map((t, i) => {
                 const cat = categoryFor(t.aqi);
@@ -34,10 +42,13 @@ export default function Header({ ticker }) {
                     aria-hidden={i >= items.length}
                     className="flex items-center gap-2 whitespace-nowrap text-xs font-medium text-inksoft"
                   >
-                    <span className="inline-block h-2 w-2 rounded-full" style={{ background: cat ? cat.color : '#cbd5e1' }} />
+                    <span
+                      className="inline-block h-2 w-2 rounded-full"
+                      style={{ background: cat ? cat.color : "#cbd5e1" }}
+                    />
                     {t.city.name}
                     <strong className="tnum font-display text-ink">{fmt(t.aqi)}</strong>
-                    <span style={{ color: cat ? cat.color : '#94a3b8' }}>{cat ? cat.name : ''}</span>
+                    <span style={{ color: cat ? cat.text : "#5d7182" }}>{cat ? cat.name : ""}</span>
                   </span>
                 );
               })}
@@ -48,3 +59,13 @@ export default function Header({ ticker }) {
     </header>
   );
 }
+
+Header.propTypes = {
+  /** Ticker entries from core.fetchTickerAQI: one per preset city. */
+  ticker: PropTypes.arrayOf(
+    PropTypes.shape({
+      city: PropTypes.shape({ name: PropTypes.string }).isRequired,
+      aqi: PropTypes.number,
+    }),
+  ),
+};

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -19,7 +19,9 @@ body {
 
 /* Tabular numerals for every data readout (gauge, stats, ticker, counters) */
 .tnum {
-  font-feature-settings: 'tnum' 1, 'lnum' 1;
+  font-feature-settings:
+    "tnum" 1,
+    "lnum" 1;
   font-variant-numeric: tabular-nums lining-nums;
 }
 
@@ -33,8 +35,12 @@ body {
 
 /* ---- live ticker marquee ---- */
 @keyframes vayu-marquee {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 .marquee-track {
   animation: vayu-marquee 46s linear infinite;
@@ -45,23 +51,44 @@ body {
 }
 
 /* ---- chat log scrollbar ---- */
-.chat-scroll::-webkit-scrollbar { width: 6px; }
-.chat-scroll::-webkit-scrollbar-thumb { background: #c3d3da; border-radius: 999px; }
-.chat-scroll::-webkit-scrollbar-track { background: transparent; }
+.chat-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+.chat-scroll::-webkit-scrollbar-thumb {
+  background: #c3d3da;
+  border-radius: 999px;
+}
+.chat-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
 
 /* ---- print: one-page air report ---- */
 @media print {
-  @page { margin: 14mm; }
-  body { background: #ffffff !important; }
-  .print-hidden { display: none !important; }
-  .print-sheet { display: block !important; }
+  @page {
+    margin: 14mm;
+  }
+  body {
+    background: #ffffff !important;
+  }
+  .print-hidden {
+    display: none !important;
+  }
+  .print-sheet {
+    display: block !important;
+  }
 }
 
 /* ---- reduced motion ---- */
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  .marquee-track { animation: none; }
-  *, *::before, *::after {
+  html {
+    scroll-behavior: auto;
+  }
+  .marquee-track {
+    animation: none;
+  }
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
