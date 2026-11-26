@@ -36,6 +36,7 @@ Vayu is a real-time Urban Air Quality Assistant for city residents, planners and
 cd vayu-react          # the React source lives here during development
 npm install
 npm run dev            # local dev server with hot reload
+npm test               # run the unit test suite (Vitest)
 ```
 
 An internet connection is required for the live Open-Meteo data.
@@ -47,6 +48,19 @@ npm run build          # outputs the static site into dist/
 # copy dist/ into the repo's docs/ folder and push —
 # GitHub Pages (Settings → Pages → main branch, /docs folder) serves it live
 ```
+
+## Testing
+
+The data library (`src/lib/core.js`) is framework-free pure ESM, so the entire computation layer is unit-tested in Node with **Vitest** — no browser and no network needed (the API helpers are tested with a stubbed `fetch`).
+
+```bash
+npm test               # vitest run — 73 tests, all passing
+```
+
+What is covered:
+
+- **`src/lib/core.test.js`** — the AQI mathematics and derived data: US EPA and CPCB breakpoint tables at every band boundary (values at and just over each edge), CPCB data-completeness rules (a 24-h mean needs ≥16 hourly values, an 8-h mean ≥6, and an overall AQI needs ≥3 pollutants including PM2.5 or PM10), the CO µg/m³ → mg/m³ conversion CPCB requires, the Berkeley Earth cigarette equivalence (24-h PM2.5 ÷ 22), trailing means, cleanest/worst 2-hour windows, best-hour selection, dominant pollutant, day summaries, pollution-source heuristics, health-guidance branching per profile, GRAP stage mapping, the activity risk planner (dose formula, 0–100 bounds, monotonicity in concentration and duration, profile-vulnerability sensitivity, verdict bands), and an end-to-end `summarize` snapshot over three synthetic days.
+- **`src/lib/core.fetch.test.js`** — Open-Meteo URL construction, response and error handling for the air-quality, ticker and geocoding calls, and current-hour index resolution.
 
 ## An honest note on the "AI" assistant
 
@@ -61,7 +75,10 @@ vayu-air-quality-assistant/ (GitHub repo)
 │   │                   # Insights, Chat, EcoGame, CityPicker, …
 │   │                   # + aceternity/ (Aurora Background, Card Spotlight,
 │   │                   #   Text Generate Effect — adapted Aceternity UI)
-│   ├── lib/core.js     # data fetching + all derived-data computation
+│   ├── lib/
+│   │   ├── core.js            # data fetching + all derived-data computation
+│   │   ├── core.test.js       # Vitest suite — AQI maths, CPCB, planner, windows
+│   │   └── core.fetch.test.js # Vitest suite — API layer (stubbed fetch)
 │   ├── App.jsx
 │   └── main.jsx
 ├── docs/               # production build output, served by GitHub Pages
