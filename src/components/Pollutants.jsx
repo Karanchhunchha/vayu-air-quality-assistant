@@ -1,11 +1,12 @@
 import { motion } from 'framer-motion';
 import { POLLUTANTS, categoryFor, fmt, subIndex } from '../lib/core';
-import { Card, SectionHeading } from './ui';
+import { SectionHeading } from './ui';
+import { CardSpotlight } from './aceternity/card-spotlight';
 
 export default function Pollutants({ values }) {
   if (!values) return null;
   return (
-    <Card>
+    <CardSpotlight>
       <SectionHeading
         kicker="Right now"
         title="Pollutant breakdown"
@@ -54,6 +55,6 @@ export default function Pollutants({ values }) {
       <p className="mt-4 text-xs leading-relaxed text-slate-400">
         WHO 2021 guideline values (24-h; O₃ 8-h, CO 24-h): PM2.5 15 · PM10 45 · NO₂ 25 · SO₂ 40 · O₃ 100 · CO 4000 µg/m³.
       </p>
-    </Card>
+    </CardSpotlight>
   );
 }

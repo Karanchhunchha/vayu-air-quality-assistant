@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CATEGORIES, CITIZEN_ACTIONS, GRAP_STAGES, categoryIndex, stageIdxFor } from '../lib/core';
-import { Card, SectionHeading } from './ui';
+import { SectionHeading } from './ui';
+import { CardSpotlight } from './aceternity/card-spotlight';
 
 export function Sources({ summary }) {
   if (!summary) return null;
   return (
-    <Card className="h-full">
+    <CardSpotlight className="h-full">
       <SectionHeading
         kicker="Why is the air like this?"
         title="Pollution source insights"
@@ -29,7 +30,7 @@ export function Sources({ summary }) {
           </motion.li>
         ))}
       </ul>
-    </Card>
+    </CardSpotlight>
   );
 }
 
@@ -40,7 +41,7 @@ export function ActionPlan({ summary }) {
   const openIdx = open === null ? active : open;
   if (!summary) return null;
   return (
-    <Card className="h-full">
+    <CardSpotlight className="h-full">
       <SectionHeading
         kicker="City response"
         title="City action plan"
@@ -96,6 +97,6 @@ export function ActionPlan({ summary }) {
           </li>
         ))}
       </ul>
-    </Card>
+    </CardSpotlight>
   );
 }

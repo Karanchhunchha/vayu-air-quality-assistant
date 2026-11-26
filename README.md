@@ -25,7 +25,7 @@ Vayu is a real-time Urban Air Quality Assistant for city residents, planners and
 ## Tech stack
 
 - **Vite 6 + React 18 (JavaScript)** — source in `src/` (React components plus a framework-free data library, `src/lib/core.js`, that handles fetching and all derived-data computation).
-- **Tailwind CSS 3** for styling and **Framer Motion 12** for animation (animated gauge, scroll reveals, chart draw-in). All npm packages are **build-time dev tooling only** — the production output is a static bundle (JS ≈ 349 kB, ≈ 114 kB gzipped; CSS ≈ 24 kB) with no server component.
+- **Tailwind CSS 3** for styling and **Framer Motion 12** for animation (animated gauge, scroll reveals, chart draw-in), with **Aceternity UI** components — Aurora Background (animated hero backdrop tinted by the live AQI colour), Card Spotlight (cursor-tracking card highlight) and Text Generate Effect (word-by-word hero subline) — adapted into `src/components/aceternity/`. All npm packages are **build-time dev tooling only** — the production output is a static bundle (JS ≈ 382 kB, ≈ 125 kB gzipped; CSS ≈ 26 kB) with no server component.
 - **Data:** [Open-Meteo Air Quality API](https://open-meteo.com/en/docs/air-quality-api) (hourly PM2.5, PM10, CO, NO₂, SO₂, O₃, dust, US AQI, European AQI; CAMS data; includes past days for CPCB trailing means and the yesterday trend) and [Open-Meteo Geocoding API](https://open-meteo.com/en/docs/geocoding-api). Both are free and require **no API key**.
 - **Persistence:** browser `localStorage` only (gamification state). No backend, no accounts, no tracking.
 - **Hosting:** GitHub Pages — the production build is committed under `docs/` and served from the `main` branch's `/docs` folder.
@@ -59,6 +59,8 @@ vayu-air-quality-assistant/ (GitHub repo)
 ├── src/                # React source
 │   ├── components/     # Hero, Pollutants, Forecast, Health, Planner,
 │   │                   # Insights, Chat, EcoGame, CityPicker, …
+│   │                   # + aceternity/ (Aurora Background, Card Spotlight,
+│   │                   #   Text Generate Effect — adapted Aceternity UI)
 │   ├── lib/core.js     # data fetching + all derived-data computation
 │   ├── App.jsx
 │   └── main.jsx

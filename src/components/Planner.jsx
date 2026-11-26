@@ -3,7 +3,8 @@ import { motion } from 'framer-motion';
 import {
   ACTIVITIES, fmt, fmtTime, hourLabel, planActivity, profileById,
 } from '../lib/core';
-import { Card, SectionHeading } from './ui';
+import { SectionHeading } from './ui';
+import { CardSpotlight } from './aceternity/card-spotlight';
 
 const DURATIONS = [0.5, 1, 1.5, 2, 3];
 
@@ -30,7 +31,7 @@ export default function Planner({ data, curIdx, summary, profile }) {
   const selectCls = 'w-full rounded-2xl border border-slate-200 bg-mist/60 px-3.5 py-2.5 text-sm font-medium text-ink outline-none transition focus:border-brand focus:bg-white focus:ring-4 focus:ring-brand/15';
 
   return (
-    <Card>
+    <CardSpotlight>
       <SectionHeading
         kicker="Plan ahead"
         title="Plan an activity — what's my risk?"
@@ -118,6 +119,6 @@ export default function Planner({ data, curIdx, summary, profile }) {
         How this score works — dose = mean PM2.5 × breathing rate × duration; score = dose × profile sensitivity
         ({prof.label}: ×{prof.vuln}) ÷ 3, capped at 100. A transparent estimate, not a medical measurement.
       </p>
-    </Card>
+    </CardSpotlight>
   );
 }

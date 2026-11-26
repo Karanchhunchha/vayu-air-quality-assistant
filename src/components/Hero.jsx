@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, animate, useReducedMotion } from 'framer-motion';
 import { fmt, fmtTime } from '../lib/core';
+import { AuroraBackground } from './aceternity/aurora-background';
+import { TextGenerateEffect } from './aceternity/text-generate-effect';
 
 function useCountUp(value) {
   const [display, setDisplay] = useState(0);
@@ -73,6 +75,7 @@ export default function Hero({ summary }) {
       }}
       aria-label="Live air quality"
     >
+      <AuroraBackground color={color} />
       <div className="relative grid items-center gap-6 lg:grid-cols-[1fr_auto]">
         <div>
           <div className="flex flex-wrap items-start justify-between gap-3">
@@ -109,9 +112,19 @@ export default function Hero({ summary }) {
             />
           </div>
 
-          <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-ink">
-            {s.cat ? s.cat.advice : 'Live data is unavailable for this location right now.'}
-          </p>
+          {s.cat ? (
+            <TextGenerateEffect
+              key={`${s.city.name}|${s.cat.name}`}
+              words={s.cat.advice}
+              className="mt-4 max-w-xl text-[15px] leading-relaxed text-ink"
+              duration={0.35}
+              staggerDelay={0.06}
+            />
+          ) : (
+            <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-ink">
+              Live data is unavailable for this location right now.
+            </p>
+          )}
 
           <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm text-inksoft">
             <p>Dominant pollutant: <strong className="font-display text-ink">{s.dom ? `${s.dom.pollutant.name} (sub-index ${s.dom.si})` : '—'}</strong></p>

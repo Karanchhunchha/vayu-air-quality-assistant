@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { PROFILES, categoryFor, fmt, fmtTime, healthAdvice } from '../lib/core';
-import { Card, SectionHeading } from './ui';
+import { SectionHeading } from './ui';
+import { CardSpotlight } from './aceternity/card-spotlight';
 
 const BOXES = [
   { key: 'mask', icon: '😷', title: 'Mask' },
@@ -45,7 +46,7 @@ export default function Health({ summary, profile, setProfile }) {
   }
 
   return (
-    <Card>
+    <CardSpotlight>
       <div className="flex flex-wrap items-start justify-between gap-3">
         <SectionHeading
           kicker="Personalised"
@@ -109,6 +110,6 @@ export default function Health({ summary, profile, setProfile }) {
         </motion.div>
       </div>
       <p className="mt-4 text-xs text-slate-400">General information, not medical advice. If you have breathing difficulty, seek medical help.</p>
-    </Card>
+    </CardSpotlight>
   );
 }
