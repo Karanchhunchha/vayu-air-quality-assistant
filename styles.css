@@ -1,0 +1,136 @@
+/* Urban Air Quality Assistant — styles (no frameworks) */
+:root{
+  --bg:#f2f6f9;
+  --card:#ffffff;
+  --ink:#17242e;
+  --muted:#5d7182;
+  --line:#dde6ec;
+  --accent:#0b7285;
+  --accent-dark:#095a6a;
+  --radius:14px;
+  --aqi-color:#999;
+  --aqi-ink:#17242e;
+  font-size:16px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  line-height:1.5;
+}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px 32px}
+h1{font-size:1.45rem;margin:0}
+h2{font-size:1.3rem;margin:0}
+h3{font-size:1.12rem;margin:0 0 12px}
+h4{font-size:1rem;margin:14px 0 6px}
+a{color:var(--accent)}
+.muted{color:var(--muted)}
+.small{font-size:.85rem}
+
+/* Header */
+.site-header{background:linear-gradient(120deg,#0b7285,#1971c2);color:#fff;margin-bottom:20px}
+.header-inner{display:flex;justify-content:space-between;align-items:center;gap:16px;padding-top:18px;padding-bottom:18px;flex-wrap:wrap}
+.brand{display:flex;gap:14px;align-items:center}
+.brand-mark{font-size:2.2rem;background:rgba(255,255,255,.18);border-radius:12px;padding:6px 10px}
+.tagline{margin:2px 0 0;opacity:.92;font-size:.92rem}
+.header-badge{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.4);padding:6px 12px;border-radius:999px;font-size:.85rem;white-space:nowrap}
+
+/* Cards & grids */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px;margin-bottom:18px;box-shadow:0 1px 3px rgba(23,36,46,.05)}
+.grid{display:grid;gap:18px}
+.grid-hero{grid-template-columns:1.15fr .85fr}
+.grid-2{grid-template-columns:1fr 1fr}
+@media (max-width:820px){.grid-hero,.grid-2{grid-template-columns:1fr}}
+
+/* City controls */
+.city-controls label{font-weight:600;display:block;margin-bottom:6px}
+.search-row{display:flex;gap:8px;flex-wrap:wrap}
+.search-row input{flex:1 1 220px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-size:1rem}
+button{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:10px 16px;font-size:.95rem;cursor:pointer}
+button:hover{background:var(--accent-dark)}
+button.secondary{background:#e7f0f3;color:var(--accent-dark);border:1px solid var(--line)}
+.search-results{margin-top:8px;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.search-results button{display:block;width:100%;text-align:left;background:#fff;color:var(--ink);border-radius:0;border-bottom:1px solid var(--line);padding:10px 12px}
+.search-results button:last-child{border-bottom:none}
+.search-results button:hover{background:#eef6f8}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.chips button{background:#eef6f8;color:var(--accent-dark);border:1px solid var(--line);border-radius:999px;padding:6px 14px}
+.chips button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.status-line{margin:12px 0 0;color:var(--muted);font-size:.9rem}
+.status-line.error{color:#c92a2a}
+
+/* AQI hero */
+.aqi-hero{border-top:8px solid var(--aqi-color)}
+.hero-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.eu-badge{background:#eef6f8;border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-size:.82rem;white-space:nowrap}
+.hero-main{display:flex;align-items:center;gap:26px;flex-wrap:wrap;margin-top:8px}
+.aqi-number{font-size:5.2rem;font-weight:800;line-height:1;color:var(--aqi-color)}
+.aqi-cat{display:inline-block;background:var(--aqi-color);color:var(--aqi-ink);font-weight:700;padding:5px 14px;border-radius:999px;font-size:1.05rem}
+.aqi-scale{display:flex;height:10px;border-radius:5px;overflow:hidden;margin:12px 0 4px;max-width:260px}
+.aqi-scale span{flex:1}
+.hero-advice{margin:14px 0 0;font-size:1.02rem;background:#f6fafb;border-left:4px solid var(--aqi-color);padding:10px 12px;border-radius:0 8px 8px 0}
+
+/* Pollutant bars */
+.pollutant-bars{display:flex;flex-direction:column;gap:12px;margin-bottom:10px}
+.pol-row{display:grid;grid-template-columns:86px 1fr 86px;gap:10px;align-items:center;font-size:.92rem}
+.pol-name{font-weight:600}
+.pol-track{background:#edf2f5;border-radius:6px;height:14px;overflow:hidden}
+.pol-fill{height:100%;border-radius:6px;min-width:2px;transition:width .4s ease}
+.pol-val{text-align:right;color:var(--muted)}
+.pol-val strong{color:var(--ink)}
+
+/* Forecast */
+#forecastChart{width:100%;height:220px;display:block}
+.day-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:14px}
+.day-card{border:1px solid var(--line);border-top:6px solid var(--dc,#999);border-radius:10px;padding:10px 12px;background:#fbfcfd}
+.day-card .d-name{font-weight:700}
+.day-card .d-max{font-size:1.5rem;font-weight:800}
+.day-card .d-cat{font-size:.85rem;font-weight:600}
+
+/* Health guidance */
+select{padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-size:1rem;max-width:100%;margin:6px 0 14px;background:#fff}
+.advice-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.advice-box{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:#fbfcfd}
+.advice-box h4{margin:0 0 6px}
+.advice-box p{margin:0}
+.advice-box.highlight{background:#fff8e1;border-color:#f1d27a}
+
+/* Sources & action plan */
+.source-list,.citizen-list{margin:0;padding-left:18px}
+.source-list li,.citizen-list li{margin-bottom:10px}
+.source-tag{display:inline-block;font-weight:700;font-size:.8rem;padding:2px 8px;border-radius:999px;background:#ffe8cc;color:#8a4b00;margin-bottom:2px}
+.stage{border:1px solid var(--line);border-left:6px solid #999;border-radius:8px;padding:10px 12px;margin-bottom:10px;background:#fbfcfd}
+.stage.current{outline:2px solid var(--accent);background:#eef8fa}
+.stage h4{margin:0 0 4px}
+.stage p{margin:0;font-size:.93rem}
+.stage .now-tag{font-size:.75rem;font-weight:700;color:var(--accent-dark);text-transform:uppercase;letter-spacing:.04em}
+
+/* Chat */
+.chat-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.chat-chips button{background:#eef6f8;color:var(--accent-dark);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:.88rem}
+.chat-log{border:1px solid var(--line);border-radius:10px;background:#fbfcfd;height:300px;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:10px}
+.msg{max-width:85%;padding:9px 13px;border-radius:14px;font-size:.95rem;white-space:pre-wrap;word-wrap:break-word}
+.msg.bot{background:#e7f0f3;align-self:flex-start;border-bottom-left-radius:4px}
+.msg.user{background:var(--accent);color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
+.chat-form{display:flex;gap:8px;margin-top:10px}
+.chat-form input{flex:1;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-size:1rem}
+
+/* Gamification */
+.game-stats{display:flex;gap:26px;flex-wrap:wrap;align-items:center;margin-bottom:8px}
+.stat{display:flex;flex-direction:column}
+.stat-num{font-size:1.9rem;font-weight:800;line-height:1.1}
+.stat-label{color:var(--muted);font-size:.85rem}
+.badge-row{display:flex;gap:6px;font-size:1.4rem}
+.badge{opacity:.25;filter:grayscale(1)}
+.badge.earned{opacity:1;filter:none}
+.eco-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;margin-top:10px}
+.eco-item{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fbfcfd;cursor:pointer}
+.eco-item input{margin-top:4px;width:18px;height:18px}
+.eco-item .pts{margin-left:auto;font-weight:700;color:var(--accent-dark);white-space:nowrap}
+.eco-item.done{background:#e6fcf5;border-color:#8ce8c3}
+
+/* Footer */
+.site-footer{color:var(--muted);font-size:.88rem;padding:6px 2px 0}
+.site-footer p{margin:6px 0}
