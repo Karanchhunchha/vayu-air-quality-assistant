@@ -53,7 +53,7 @@ Vayu addresses the problem with a single-page React application that runs entire
     5-day forecast)
 ```
 
-- **Build:** Vite + React 18 (JavaScript), styled with Tailwind CSS 3 and animated with Framer Motion 12, with Aceternity UI components (Aurora Background, Card Spotlight, Text Generate Effect) adapted in `src/components/aceternity/`. All npm dependencies are build-time dev tooling; `npm run build` emits a fully static bundle (JS ≈ 382 kB, ≈ 125 kB gzipped; CSS ≈ 26 kB) into `dist/`, which is committed under `docs/` in the repository.
+- **Build:** Vite + React 18 (JavaScript), styled with Tailwind CSS 3 and animated with Framer Motion 12, with Aceternity UI components (Aurora Background, Card Spotlight, Text Generate Effect) adapted in `src/components/aceternity/`. A design-system pass (ui-ux-pro-max design data; an impeccable-style audit of hierarchy, contrast and consistency) set the Lexend + Inter typography, WCAG-AA colour tokens and tabular numerals, and adapted shadcn/ui stat/data-row patterns and Mantine's segmented-control and ring-progress patterns. All npm dependencies are build-time dev tooling; `npm run build` emits a fully static bundle (JS ≈ 383 kB, ≈ 126 kB gzipped; CSS ≈ 27 kB) into `dist/`, which is committed under `docs/` in the repository.
 - **No backend.** All computation — US/EU sub-index estimation, CPCB AQI calculation, dominant-pollutant detection, best-hour and window search, source heuristics, dose modelling, chat parsing — happens in the browser.
 - **Hosting:** GitHub Pages serves the built site from the repository's `docs/` folder (main branch).
 - **Privacy:** no accounts, no analytics; user input never leaves the browser except the public Open-Meteo API calls; gamification state stays in `localStorage`.

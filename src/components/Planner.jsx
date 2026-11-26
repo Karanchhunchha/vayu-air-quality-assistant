@@ -74,12 +74,26 @@ export default function Planner({ data, curIdx, summary, profile }) {
         className="mt-5 flex flex-col gap-4 rounded-3xl bg-mist/80 p-5 ring-1 ring-slate-900/5 sm:flex-row sm:items-center"
       >
         <div className="flex items-center gap-4">
-          <div
-            className="flex h-20 w-20 shrink-0 flex-col items-center justify-center rounded-full text-white shadow-inner"
-            style={{ background: plan.verdict.color }}
-          >
-            <span className="font-display text-[26px] font-extrabold leading-none">{plan.score === null ? '–' : plan.score}</span>
-            <span className="text-[9px] font-bold uppercase tracking-[0.16em] opacity-90">/ 100 risk</span>
+          {/* Score ring — pattern adapted from Mantine's RingProgress:
+              SVG track + verdict-coloured progress arc, value centred. */}
+          <div className="relative h-[92px] w-[92px] shrink-0">
+            <svg viewBox="0 0 92 92" className="h-full w-full -rotate-90" aria-hidden="true">
+              <circle cx="46" cy="46" r="40" fill="none" stroke="#e2ebee" strokeWidth="9" />
+              <motion.circle
+                cx="46" cy="46" r="40" fill="none"
+                stroke={plan.verdict.color} strokeWidth="9" strokeLinecap="round"
+                strokeDasharray={2 * Math.PI * 40}
+                initial={false}
+                animate={{ strokeDashoffset: 2 * Math.PI * 40 * (1 - (plan.score ?? 0) / 100) }}
+                transition={{ duration: 0.7, ease: [0.22, 0.61, 0.36, 1] }}
+              />
+            </svg>
+            <div className="absolute inset-0 flex flex-col items-center justify-center">
+              <span className="tnum font-display text-[26px] font-extrabold leading-none" style={{ color: plan.verdict.color }}>
+                {plan.score === null ? '–' : plan.score}
+              </span>
+              <span className="mt-0.5 text-[9px] font-bold uppercase tracking-[0.16em] text-inkfaint">/ 100 risk</span>
+            </div>
           </div>
           <div>
             <p className="font-display text-lg font-bold" style={{ color: plan.verdict.color }}>{plan.verdict.label}</p>
@@ -88,18 +102,18 @@ export default function Planner({ data, curIdx, summary, profile }) {
             </p>
           </div>
         </div>
-        <dl className="grid flex-1 grid-cols-3 gap-3 text-center sm:text-left">
+        <dl className="grid flex-1 grid-cols-3 gap-3 text-center sm:border-l sm:border-line sm:pl-6 sm:text-left">
           <div>
-            <dt className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Avg PM2.5</dt>
-            <dd className="font-display text-base font-bold text-ink">{fmt(plan.avgPM)} µg/m³</dd>
+            <dt className="text-[11px] font-bold uppercase tracking-wider text-inkfaint">Avg PM2.5</dt>
+            <dd className="tnum font-display text-base font-bold text-ink">{fmt(plan.avgPM)} µg/m³</dd>
           </div>
           <div>
-            <dt className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Inhaled dose</dt>
-            <dd className="font-display text-base font-bold text-ink">{plan.dose === null ? '—' : `≈${fmt(plan.dose)} µg`}</dd>
+            <dt className="text-[11px] font-bold uppercase tracking-wider text-inkfaint">Inhaled dose</dt>
+            <dd className="tnum font-display text-base font-bold text-ink">{plan.dose === null ? '—' : `≈${fmt(plan.dose)} µg`}</dd>
           </div>
           <div>
-            <dt className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Breathing rate</dt>
-            <dd className="font-display text-base font-bold text-ink">{plan.activity.rate} m³/h</dd>
+            <dt className="text-[11px] font-bold uppercase tracking-wider text-inkfaint">Breathing rate</dt>
+            <dd className="tnum font-display text-base font-bold text-ink">{plan.activity.rate} m³/h</dd>
           </div>
         </dl>
       </motion.div>
@@ -115,7 +129,7 @@ export default function Planner({ data, curIdx, summary, profile }) {
         </motion.p>
       )}
 
-      <p className="mt-3 text-xs leading-relaxed text-slate-400">
+      <p className="mt-3 text-xs leading-relaxed text-inkfaint">
         How this score works — dose = mean PM2.5 × breathing rate × duration; score = dose × profile sensitivity
         ({prof.label}: ×{prof.vuln}) ÷ 3, capped at 100. A transparent estimate, not a medical measurement.
       </p>

@@ -12,7 +12,9 @@ export default function Pollutants({ values }) {
         title="Pollutant breakdown"
         sub="Bar length is scaled to each pollutant's US EPA sub-index, so the longest bar is what is driving the AQI. The tick marks the WHO 2021 guideline value."
       />
-      <div className="space-y-4">
+      {/* Data-list pattern (shadcn/ui table rows): hairline-divided rows,
+          tabular right-aligned values — reads as an instrument panel. */}
+      <div className="divide-y divide-line">
         {POLLUTANTS.map((p, i) => {
           const v = values[p.key];
           const si = subIndex(p.key, v);
@@ -22,13 +24,13 @@ export default function Pollutants({ values }) {
           const whoPct = whoSi === null ? 0 : Math.min(100, whoSi / 5);
           const ratio = v !== null && v !== undefined ? v / p.who24 : null;
           return (
-            <div key={p.key}>
+            <div key={p.key} className="py-3.5 first:pt-0 last:pb-0">
               <div className="mb-1.5 flex items-baseline justify-between gap-3">
                 <span className="font-display text-sm font-bold text-ink">{p.name}</span>
-                <span className="text-[13px] text-inksoft">
+                <span className="tnum text-[13px] text-inksoft">
                   <strong className="font-display text-ink">{fmt(v)}</strong> µg/m³
                   {ratio !== null && (
-                    <span className={ratio > 1 ? 'ml-2 font-semibold text-red-500' : 'ml-2 font-semibold text-emerald-600'}>
+                    <span className={ratio > 1 ? 'ml-2 font-semibold text-[#c81e1e]' : 'ml-2 font-semibold text-[#047857]'}>
                       {ratio >= 1 ? `${ratio.toFixed(1)}× WHO limit` : 'within WHO limit'}
                     </span>
                   )}
@@ -52,7 +54,7 @@ export default function Pollutants({ values }) {
           );
         })}
       </div>
-      <p className="mt-4 text-xs leading-relaxed text-slate-400">
+      <p className="mt-4 border-t border-line pt-3 text-xs leading-relaxed text-inkfaint">
         WHO 2021 guideline values (24-h; O₃ 8-h, CO 24-h): PM2.5 15 · PM10 45 · NO₂ 25 · SO₂ 40 · O₃ 100 · CO 4000 µg/m³.
       </p>
     </CardSpotlight>

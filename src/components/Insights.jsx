@@ -88,7 +88,7 @@ export function ActionPlan({ summary }) {
           );
         })}
       </div>
-      <h4 className="mt-5 font-display text-sm font-bold text-ink">What you can do today</h4>
+      <h3 className="mt-5 font-display text-sm font-bold text-ink">What you can do today</h3>
       <ul className="mt-2 space-y-1.5">
         {CITIZEN_ACTIONS[ci].map((a) => (
           <li key={a} className="flex gap-2 text-sm leading-relaxed text-inksoft">

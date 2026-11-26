@@ -71,14 +71,14 @@ export default function EcoGame() {
             initial={{ scale: 1.25 }}
             animate={{ scale: 1 }}
             transition={{ type: 'spring', stiffness: 300, damping: 16 }}
-            className="font-display text-4xl font-extrabold text-brand"
+            className="tnum font-display text-4xl font-extrabold text-brand"
           >
             {game.points}
           </motion.span>
           <span className="text-sm font-medium text-inksoft">points</span>
         </div>
         <div className="flex items-baseline gap-2">
-          <span className="font-display text-4xl font-extrabold text-orange-500">{game.streak}</span>
+          <span className="tnum font-display text-4xl font-extrabold text-[#d97706]">{game.streak}</span>
           <span className="text-sm font-medium text-inksoft">day streak 🔥</span>
         </div>
         <div className="flex items-center gap-2">
@@ -107,7 +107,7 @@ export default function EcoGame() {
               transition={{ duration: 0.5 }}
             />
           </div>
-          <p className="mt-1 text-xs text-slate-400">{doneToday.length} of {ECO_ACTIONS.length} actions done today</p>
+          <p className="tnum mt-1 text-xs text-inkfaint">{doneToday.length} of {ECO_ACTIONS.length} actions done today</p>
         </div>
       </div>
       <div className="grid gap-2 sm:grid-cols-2">

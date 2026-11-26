@@ -90,6 +90,8 @@ export default function Forecast({ data, curIdx, summary }) {
               <text x={8} y={Y(g) + 4} fontSize="11" fill="#5d7182" fontFamily="Inter, sans-serif">{g}</text>
             </g>
           ))}
+          {/* Chart colours are the brand / brand-strong design tokens
+              (#0e7c86 / #0b7285 in tailwind.config.js), as SVG attributes. */}
           {area && (
             <motion.path key={'a' + chartKey} d={area} fill="#0e7c86" initial={{ opacity: 0 }} animate={{ opacity: 0.09 }} transition={{ duration: 1, delay: 0.4 }} />
           )}
@@ -134,9 +136,9 @@ export default function Forecast({ data, curIdx, summary }) {
               <p className="text-[13px] font-semibold text-inksoft">
                 {label} · {Number(d.date.slice(8, 10))} {MONTHS[Number(d.date.slice(5, 7)) - 1]}
               </p>
-              <p className="mt-1 font-display text-xl font-bold text-ink">Max {fmt(d.max)}</p>
+              <p className="tnum mt-1 font-display text-xl font-bold text-ink">Max {fmt(d.max)}</p>
               <p className="text-[13px] font-semibold" style={{ color: cat ? cat.color : '#94a3b8' }}>{cat ? cat.name : '—'}</p>
-              <p className="mt-0.5 text-xs text-slate-400">Cleanest hour AQI {fmt(d.min)}</p>
+              <p className="tnum mt-0.5 text-xs text-inkfaint">Cleanest hour AQI {fmt(d.min)}</p>
             </motion.div>
           );
         })}

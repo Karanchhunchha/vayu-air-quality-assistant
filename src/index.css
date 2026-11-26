@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -17,6 +17,20 @@ body {
   background: rgba(14, 124, 134, 0.22);
 }
 
+/* Tabular numerals for every data readout (gauge, stats, ticker, counters) */
+.tnum {
+  font-feature-settings: 'tnum' 1, 'lnum' 1;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* One visible keyboard-focus ring for every interactive element
+   (impeccable audit P2 / ui-ux-pro-max UX rule #28) */
+:focus-visible {
+  outline: 2px solid #0e7c86;
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
 /* ---- live ticker marquee ---- */
 @keyframes vayu-marquee {
   from { transform: translateX(0); }
@@ -32,7 +46,7 @@ body {
 
 /* ---- chat log scrollbar ---- */
 .chat-scroll::-webkit-scrollbar { width: 6px; }
-.chat-scroll::-webkit-scrollbar-thumb { background: #cbd8e0; border-radius: 999px; }
+.chat-scroll::-webkit-scrollbar-thumb { background: #c3d3da; border-radius: 999px; }
 .chat-scroll::-webkit-scrollbar-track { background: transparent; }
 
 /* ---- print: one-page air report ---- */

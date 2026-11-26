@@ -22,16 +22,27 @@ function useCountUp(value) {
   return display;
 }
 
-function ScaleBadge({ label, value, catName, color, title }) {
+/*
+ * Stat cell for the hero stat strip — pattern adapted from shadcn/ui's
+ * stat-card examples (label over a large tabular numeral, category as a
+ * coloured qualifier). The three AQI scales render as ONE divided group
+ * so the comparison reads at a glance (design direction v2).
+ */
+function StatCell({ label, value, catName, color, title }) {
   return (
-    <div className="flex items-center gap-2.5 rounded-2xl bg-white/70 px-3.5 py-2.5 ring-1 ring-slate-900/5 backdrop-blur" title={title}>
-      <span className="h-8 w-1.5 rounded-full" style={{ background: color || '#cbd5e1' }} />
-      <div className="leading-tight">
-        <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-slate-500">{label}</p>
-        <p className="font-display text-[15px] font-bold text-ink">
-          {value} {catName && <span className="text-xs font-semibold" style={{ color: color || '#64748b' }}>{catName}</span>}
-        </p>
-      </div>
+    <div className="min-w-0 px-3.5 py-3 sm:px-4" title={title}>
+      <p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-inkfaint">
+        <span className="h-3.5 w-1 shrink-0 rounded-full" style={{ background: color || '#cbd5e1' }} />
+        <span className="truncate">{label}</span>
+      </p>
+      <p className="tnum mt-1.5 font-display text-xl font-bold leading-none text-ink">
+        {value}
+        {catName && (
+          <span className="mt-1 block truncate text-[11px] font-semibold leading-tight" style={{ color: color || '#64748b' }}>
+            {catName}
+          </span>
+        )}
+      </p>
     </div>
   );
 }
@@ -80,13 +91,13 @@ export default function Hero({ summary }) {
         <div>
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
-              <h2 className="font-display text-2xl font-bold leading-tight text-ink sm:text-[28px]">
+              <h1 className="font-display text-2xl font-bold leading-tight text-ink sm:text-[28px]">
                 {s.city.name}
                 <span className="font-semibold text-inksoft">
                   {s.city.admin1 ? `, ${s.city.admin1}` : ''}{s.city.country ? `, ${s.city.country}` : ''}
                 </span>
-              </h2>
-              <p className="mt-1 text-[13px] text-inksoft">
+              </h1>
+              <p className="mt-1 text-[13px] text-inkfaint">
                 Hour: {fmtTime(s.timeStr)} · Timezone: {s.timezone} · Source: Open-Meteo (CAMS)
               </p>
             </div>
@@ -100,10 +111,10 @@ export default function Hero({ summary }) {
             </button>
           </div>
 
-          <div className="mt-4 flex flex-wrap items-center gap-2.5">
-            <ScaleBadge label="US AQI" value={fmt(s.aqi)} catName={s.cat ? s.cat.name : ''} color={color} title="United States EPA Air Quality Index" />
-            <ScaleBadge label="EU AQI" value={fmt(s.values.european_aqi)} color="#38bdf8" title="European Air Quality Index, for comparison" />
-            <ScaleBadge
+          <div className="mt-5 grid max-w-xl grid-cols-3 divide-x divide-line overflow-hidden rounded-2xl bg-white/75 shadow-sm ring-1 ring-slate-900/5 backdrop-blur">
+            <StatCell label="US AQI" value={fmt(s.aqi)} catName={s.cat ? s.cat.name : ''} color={color} title="United States EPA Air Quality Index" />
+            <StatCell label="EU AQI" value={fmt(s.values.european_aqi)} catName="" color="#0284c7" title="European Air Quality Index, for comparison" />
+            <StatCell
               label="India CPCB"
               value={s.cpcb && s.cpcb.enough ? String(s.cpcb.aqi) : '—'}
               catName={s.cpcb && s.cpcb.enough ? s.cpcb.cat.name : 'needs more data'}
@@ -126,12 +137,13 @@ export default function Hero({ summary }) {
             </p>
           )}
 
-          <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm text-inksoft">
-            <p>Dominant pollutant: <strong className="font-display text-ink">{s.dom ? `${s.dom.pollutant.name} (sub-index ${s.dom.si})` : '—'}</strong></p>
+          {/* Key facts: one grouped row under a hairline, not scattered lines */}
+          <div className="mt-5 flex flex-wrap gap-x-6 gap-y-2 border-t border-line pt-4 text-sm text-inksoft">
+            <p>Dominant pollutant: <strong className="tnum font-display text-ink">{s.dom ? `${s.dom.pollutant.name} (sub-index ${s.dom.si})` : '—'}</strong></p>
             {s.cig && (
               <p title="Berkeley Earth rule: 24 hours at 22 µg/m³ PM2.5 ≈ one cigarette">
-                🚬 Breathing today's air ≈ <strong className="font-display text-ink">{s.cig.cigs.toFixed(1)} cigarettes/day</strong>
-                <span className="text-slate-400"> (24-h PM2.5 {fmt(s.cig.mean)} µg/m³)</span>
+                🚬 Breathing today's air ≈ <strong className="tnum font-display text-ink">{s.cig.cigs.toFixed(1)} cigarettes/day</strong>
+                <span className="text-inkfaint"> (24-h PM2.5 {fmt(s.cig.mean)} µg/m³)</span>
               </p>
             )}
           </div>
@@ -140,7 +152,7 @@ export default function Hero({ summary }) {
             <p className="mt-3 inline-flex items-center gap-2 rounded-full bg-white/70 px-3 py-1.5 text-[13px] font-medium text-inksoft ring-1 ring-slate-900/5">
               <span aria-hidden="true">{trendDelta > 0 ? '📈' : trendDelta < 0 ? '📉' : '➖'}</span>
               Yesterday's peak AQI {fmt(s.yesterdayMax)} → today's peak {fmt(s.todayMax)}
-              <strong style={{ color: trendDelta > 0 ? '#d92323' : trendDelta < 0 ? '#00a344' : '#64748b' }}>
+              <strong style={{ color: trendDelta > 0 ? '#c81e1e' : trendDelta < 0 ? '#047857' : '#5d7182' }}>
                 {trendDelta > 0 ? `+${trendDelta} worse` : trendDelta < 0 ? `${trendDelta} better` : 'no change'}
               </strong>
             </p>
@@ -161,7 +173,7 @@ export default function Hero({ summary }) {
             />
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="font-display text-[56px] font-extrabold leading-none tracking-tight" style={{ color }}>
+            <span className="tnum font-display text-[56px] font-extrabold leading-none tracking-tight" style={{ color }}>
               {s.aqi === null ? '–' : shown}
             </span>
             <span className="mt-1 text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500">US AQI</span>

@@ -122,7 +122,7 @@ export default function CityPicker({ city, onCity, onPersona, status, setStatus 
               key={c.name}
               type="button"
               onClick={() => onCity(c)}
-              className={`rounded-full px-3.5 py-1.5 text-[13px] font-semibold transition ${
+              className={`rounded-full px-3.5 py-2 text-[13px] font-semibold transition ${
                 active
                   ? 'bg-ink text-white shadow-sm'
                   : 'bg-mist text-inksoft ring-1 ring-slate-200 hover:bg-brand-soft hover:text-brand-deep hover:ring-brand/30'
@@ -135,7 +135,7 @@ export default function CityPicker({ city, onCity, onPersona, status, setStatus 
       </div>
 
       <div className="mt-4 border-t border-dashed border-slate-200 pt-4">
-        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">
+        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-inkfaint">
           Try a persona — one click sets city + profile
         </p>
         <div className="mt-2.5 flex flex-wrap gap-2">

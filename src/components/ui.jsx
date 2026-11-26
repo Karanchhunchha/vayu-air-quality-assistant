@@ -20,11 +20,13 @@ export function SectionHeading({ kicker, title, sub }) {
   return (
     <div className="mb-5">
       {kicker && (
-        <p className="font-display text-[11px] font-bold uppercase tracking-[0.18em] text-brand">
+        <p className="flex items-center gap-2 font-display text-[11px] font-bold uppercase tracking-[0.18em] text-brand">
+          <span className="h-[2px] w-5 rounded-full bg-brand" aria-hidden="true" />
           {kicker}
         </p>
       )}
-      <h3 className="mt-1 font-display text-xl font-bold text-ink sm:text-2xl">{title}</h3>
+      {/* h2: the hero city name is the page h1 (impeccable audit — heading hierarchy) */}
+      <h2 className="mt-1.5 font-display text-xl font-bold text-ink sm:text-2xl">{title}</h2>
       {sub && <p className="mt-1 max-w-2xl text-sm leading-relaxed text-inksoft">{sub}</p>}
     </div>
   );

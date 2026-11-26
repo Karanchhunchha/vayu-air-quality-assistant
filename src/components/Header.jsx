@@ -27,10 +27,16 @@ export default function Header({ ticker }) {
               {doubled.map((t, i) => {
                 const cat = categoryFor(t.aqi);
                 return (
-                  <span key={i} className="flex items-center gap-2 whitespace-nowrap text-xs font-medium text-inksoft">
+                  /* The marquee renders the list twice for a seamless loop;
+                     the second copy is hidden from assistive tech. */
+                  <span
+                    key={i}
+                    aria-hidden={i >= items.length}
+                    className="flex items-center gap-2 whitespace-nowrap text-xs font-medium text-inksoft"
+                  >
                     <span className="inline-block h-2 w-2 rounded-full" style={{ background: cat ? cat.color : '#cbd5e1' }} />
                     {t.city.name}
-                    <strong className="font-display text-ink">{fmt(t.aqi)}</strong>
+                    <strong className="tnum font-display text-ink">{fmt(t.aqi)}</strong>
                     <span style={{ color: cat ? cat.color : '#94a3b8' }}>{cat ? cat.name : ''}</span>
                   </span>
                 );

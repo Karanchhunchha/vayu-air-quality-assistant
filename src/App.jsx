@@ -70,7 +70,7 @@ export default function App() {
   return (
     <div className="min-h-screen">
       <Header ticker={ticker} />
-      <main className="print-hidden mx-auto max-w-6xl space-y-5 px-4 pb-10 pt-5 sm:px-6">
+      <main className="print-hidden mx-auto max-w-6xl space-y-6 px-4 pb-10 pt-6 sm:px-6">
         <Reveal>
           <Card>
             <CityPicker city={city} onCity={loadCity} onPersona={handlePersona} status={status} setStatus={setStatus} />
@@ -83,7 +83,7 @@ export default function App() {
               <Hero summary={summary} />
             </Reveal>
             <Reveal>
-              <div className="grid gap-5 lg:grid-cols-5">
+              <div className="grid gap-6 lg:grid-cols-5">
                 <div className="lg:col-span-3">
                   <Forecast data={data} curIdx={curIdx} summary={summary} />
                 </div>
@@ -99,7 +99,7 @@ export default function App() {
               <Planner data={data} curIdx={curIdx} summary={summary} profile={profile} />
             </Reveal>
             <Reveal>
-              <div className="grid gap-5 lg:grid-cols-2">
+              <div className="grid gap-6 lg:grid-cols-2">
                 <Sources summary={summary} />
                 <ActionPlan summary={summary} />
               </div>
@@ -120,14 +120,14 @@ export default function App() {
           </Card>
         )}
 
-        <footer className="px-2 pb-2 pt-4 text-center text-[13px] leading-relaxed text-slate-400">
+        <footer className="px-2 pb-2 pt-4 text-center text-[13px] leading-relaxed text-inkfaint">
           <p>
             Data: <a className="font-medium text-brand underline-offset-2 hover:underline" href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo</a>{' '}
             Air Quality API (CAMS atmosphere data) &amp; Geocoding API — free, no key required. CPCB AQI is computed locally
             from trailing 24-h / 8-h means using CPCB breakpoints. Source insights are heuristics from the live pollutant mix,
             not official source apportionment. Health guidance is general information, not medical advice.
           </p>
-          <p className="mt-1.5 font-medium text-slate-500">
+          <p className="mt-1.5 font-medium text-inksoft">
             Vayu — built for Hack2Skill PromptWars, Challenge 6: Urban Air Quality Assistant · Team Vayu
           </p>
         </footer>

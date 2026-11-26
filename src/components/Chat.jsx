@@ -142,13 +142,13 @@ export default function Chat({ currentSummary, profile, guidance }) {
             key={c.label}
             type="button"
             onClick={() => answer(c.q)}
-            className="rounded-full bg-mist px-3 py-1.5 text-[13px] font-medium text-inksoft ring-1 ring-slate-200 transition hover:bg-brand-soft hover:text-brand-deep hover:ring-brand/30"
+            className="rounded-full bg-mist px-3 py-2 text-[13px] font-medium text-inksoft ring-1 ring-slate-200 transition hover:bg-brand-soft hover:text-brand-deep hover:ring-brand/30"
           >
             {c.label}
           </button>
         ))}
       </div>
-      <div ref={logRef} className="chat-scroll h-72 space-y-2.5 overflow-y-auto rounded-2xl bg-mist/70 p-4 ring-1 ring-slate-900/5" aria-live="polite">
+      <div ref={logRef} className="chat-scroll h-72 space-y-2.5 overflow-y-auto rounded-2xl bg-surface/70 p-4 ring-1 ring-slate-900/5" aria-live="polite">
         {messages.map((m, i) => (
           <motion.div
             key={i}
@@ -181,7 +181,9 @@ export default function Chat({ currentSummary, profile, guidance }) {
         className="mt-3 flex gap-2"
         onSubmit={(e) => { e.preventDefault(); const v = input; setInput(''); answer(v); }}
       >
+        <label htmlFor="chatInput" className="sr-only">Ask the air quality assistant a question</label>
         <input
+          id="chatInput"
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}

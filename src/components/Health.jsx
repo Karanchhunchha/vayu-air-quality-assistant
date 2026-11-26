@@ -65,16 +65,19 @@ export default function Health({ summary, profile, setProfile }) {
       </div>
 
       <label htmlFor="profileSelect" className="text-sm font-semibold text-ink">Who is this guidance for?</label>
-      <div className="mt-2 flex flex-wrap gap-2" role="group" aria-label="Guidance profile">
+      {/* Segmented control — pattern adapted from Mantine's SegmentedControl:
+          one recessed track, the active option as a raised white pill. */}
+      <div className="mt-2 inline-flex max-w-full flex-wrap gap-1 rounded-full bg-surface p-1 ring-1 ring-line" role="group" aria-label="Guidance profile">
         {PROFILES.map((p) => (
           <button
             key={p.id}
             type="button"
             onClick={() => setProfile(p.id)}
+            aria-pressed={profile === p.id}
             className={`rounded-full px-4 py-2 text-[13px] font-semibold transition ${
               profile === p.id
-                ? 'bg-brand text-white shadow-sm'
-                : 'bg-mist text-inksoft ring-1 ring-slate-200 hover:bg-brand-soft hover:text-brand-deep'
+                ? 'bg-white text-brand-deep shadow-sm ring-1 ring-slate-900/10'
+                : 'text-inksoft hover:text-ink'
             }`}
           >
             {p.label}
@@ -85,7 +88,7 @@ export default function Health({ summary, profile, setProfile }) {
         {PROFILES.map((p) => <option key={p.id} value={p.id}>{p.label}</option>)}
       </select>
 
-      <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="mt-5 grid gap-3 sm:grid-cols-3">
         {BOXES.map((b, i) => (
           <motion.div
             key={b.key + profile}
@@ -98,18 +101,23 @@ export default function Health({ summary, profile, setProfile }) {
             <p className="mt-1.5 text-sm leading-relaxed text-inksoft">{texts[b.key]}</p>
           </motion.div>
         ))}
-        <motion.div
-          key={'best' + profile}
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.21 }}
-          className="rounded-2xl bg-brand-soft/70 p-4 ring-1 ring-brand/20"
-        >
-          <p className="font-display text-sm font-bold text-brand-deep">🕒 Best time outdoors</p>
-          <p className="mt-1.5 text-sm leading-relaxed text-inksoft">{bestText}</p>
-        </motion.div>
       </div>
-      <p className="mt-4 text-xs text-slate-400">General information, not medical advice. If you have breathing difficulty, seek medical help.</p>
+      {/* Featured banner (bento move): the single most actionable fact in this
+          section is promoted out of the tile grid to full width. */}
+      <motion.div
+        key={'best' + profile}
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.21 }}
+        className="mt-3 flex items-start gap-3.5 rounded-2xl bg-brand-soft/70 p-4 ring-1 ring-brand/20 sm:items-center"
+      >
+        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-white text-xl shadow-sm ring-1 ring-brand/15" aria-hidden="true">🕒</span>
+        <div>
+          <p className="font-display text-sm font-bold text-brand-deep">Best time outdoors</p>
+          <p className="mt-0.5 text-sm leading-relaxed text-inksoft">{bestText}</p>
+        </div>
+      </motion.div>
+      <p className="mt-4 text-xs text-inkfaint">General information, not medical advice. If you have breathing difficulty, seek medical help.</p>
     </CardSpotlight>
   );
 }
