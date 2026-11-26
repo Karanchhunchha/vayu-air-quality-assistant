@@ -29,14 +29,14 @@ Vayu needs no backend, no API keys and no build step: three static files hosted 
 | **Team Lead Name** | Karan Chhunchha |
 | **Team Lead Email** | karamchhunchha@gmail.com |
 | **Select Challenge** | [Challenge 6] Urban Air Quality Assistant |
-| **GitHub Link** | _to be filled after the repo is created_ — expected: `https://github.com/Karanchhunchha/vayu-air-quality-assistant` |
-| **Hosted URL** | _to be filled after GitHub Pages is enabled_ — expected: `https://karanchhunchha.github.io/vayu-air-quality-assistant/` |
+| **GitHub Link** | `https://github.com/Karanchhunchha/vayu-air-quality-assistant` |
+| **Hosted URL** | `https://karanchhunchha.github.io/vayu-air-quality-assistant/` |
 | **Loom Video Link** | _to be filled after recording the demo (see DEMO-SCRIPT.md)_ |
 | **Project Description** | Paste section (a) above |
 | **Upload File** | The project report PDF generated from `report.md` (PDF/DOC/DOCX, max 10 MB) |
 
 ### Pre-submit checklist
-- [ ] Repo `vayu-air-quality-assistant` is public and the Pages site loads (AQI number + chart visible).
+- [x] Repo `vayu-air-quality-assistant` is public and the Pages site loads (AQI number + chart visible) — verified 26 Nov 2026, Delhi AQI 198 with live forecast.
 - [ ] GitHub Link and Hosted URL open correctly in a private/incognito window.
 - [ ] Loom video is recorded, set to public/anyone-with-link, and the link plays.
 - [ ] Report PDF is under 10 MB and opens correctly.
